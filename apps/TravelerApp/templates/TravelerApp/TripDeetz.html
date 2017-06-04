@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Python Belt Test - Destinations Page</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'TraverlApp/CSS/TraverlAppCSS.css' %}" media="screen" title="no_title" charset="utf-8">
+        <meta name="description" content="Checking out a trip">
+        <meta name="keywords" content="HTML, CSS, Python, Django, SQL">
+        <meta name="author" content="Carlos Gutz">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id="master">
+            <form class="tripdee" action="{% url 'traveler:logout' %}" method="POST">
+                {% csrf_token %}
+                <button style="float:right" id="Logout" type="submit" name="Logout" value="Logout">Logout</button>
+            </form>
+            <form class="tripdee" action="{% url 'traveler:index' %}" method="POST">
+                {% csrf_token %}
+                <button style="float:left" id="traveler_page" type="submit" name="MainPage" value="MainPage">Return to Main Page</button>
+            </form>
+            <fieldset id="TripDeetz">
+                <h1>Destination Trip Details</h1>
+                <h3>{{ current_stuff.destination }}</h3>
+                <p>Trip creator: {{ current_stuff.user.name }}</p>
+                <p>Description: {{ current_stuff.description }}</p>
+                <p>Departure: {{ current_stuff.departure }}</p>
+                <p>Return Date: {{ current_stuff.return_date }}</p>
+            </fieldset>
+            <h2>Others Joining this trip:</h2>
+            {% for items in multitravel %}
+                {% if logged_user.name == items.user.name  %}
+                    <p>{{ items.user.name }}</p>
+                {% else %}
+                <p>{{ items.user.name }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </body>
+</html>

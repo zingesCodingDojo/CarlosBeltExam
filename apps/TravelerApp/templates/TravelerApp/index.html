@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Python Belt Test - Logged In Page</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'TraverlApp/CSS/TraverlAppCSS.css' %}" media="screen" title="no_title" charset="utf-8">
+        <meta name="description" content="Logged in">
+        <meta name="keywords" content="HTML, CSS, Python, Django, SQL">
+        <meta name="author" content="Carlos Gutz">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id="master">
+            <form action="{% url 'traveler:logout' %}" method="POST">
+                {% csrf_token %}
+                <button style="float:right" id="Logout" type="submit" name="Logout" value="Logout">Logout</button>
+            </form>
+
+            <h1>Greetings, {{ request.session.logged_user }}.</h1>
+            <h2>Personal Trips</h2>
+            <table id="user_travel">
+                <thead>
+                    <tr>
+                        <th>Destination</th>
+                        <th>Travel Begins</th>
+                        <th>Travel Ends</th>
+                        <th>Plan</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for items in current_user %}
+                    <tr>
+                        <td><a href="{% url 'traveler:destinations' id=items.id %}">{{ items.destination }}</a></td>
+                        <td>{{ items.departure }}</td>
+                        <td>{{ items.return_date }}</td>
+                        <td>{{ items.description }}</td>
+                        <td><a href="{% url 'traveler:delete' id=items.id %}">Delete</a></td>
+                    </tr>
+                {% endfor %}
+                {% for items in multitravelers %}
+                    <tr>
+                        <td><a href="{% url 'traveler:destinations' id=items.id %}">{{ items.travel.destination }}</a></td>
+                        <td>{{ items.travel.departure }}</td>
+                        <td>{{ items.travel.return_date }}</td>
+                        <td>{{ items.travel.description }}</td>
+                        <td>Not Owner!</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <h2>All others travel plans</h2>
+            <table id="all_travlers_plans">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Destination</th>
+                        <th>Travel Begins</th>
+                        <th>Travel Ends</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for items in all_users %}
+                    <tr>
+                        <td> {{ items.user.name }}</td>
+                        <td><a href="{% url 'traveler:destinations' id=items.id%}">{{ items.destination }}</a></td>
+                        <td> {{ items.departure }}</td>
+                        <td> {{ items.return_date }}</td>
+                        <td><a href="{% url 'traveler:join_trip' id=items.id %}">Join</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <a href="{% url 'traveler:new_trip' %}">Create New Travel Plan</a>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Python Belt Test - New Trip Page</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'TraverlApp/CSS/TraverlAppCSS.css' %}" media="screen" title="no_title" charset="utf-8">
+        <meta name="description" content="Adding a travel plan!">
+        <meta name="keywords" content="HTML, CSS, Python, Django, SQL">
+        <meta name="author" content="Carlos Gutz">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript" src="{% static 'TraverlApp/JS/TravelerAppJS.js' %}"></script>
+
+
+    </head>
+    <body>
+        <div id="master">
+            <form action="{% url 'traveler:logout' %}" method="POST">
+                {% csrf_token %}
+                <button style="float:right" id="Logout" type="submit" name="Logout" value="Logout">Logout</button>
+            </form>
+            <form action="{% url 'traveler:index' %}" method="POST">
+                {% csrf_token %}
+                <button style="float:left" id="traveler_page" type="submit" name="MainPage" value="MainPage">Return to Main Page</button>
+            </form>
+            <fieldset id="AddTripStuff">
+                <legend>Add New Trip</legend>
+                <form action="{% url 'traveler:add_new_trip' %}" method="POST">
+                    {% csrf_token %}
+                    <ul>
+                        <label for="destination">Destination:</label>
+                        <label for="description">Description:</label><br><br>
+                        <label for="depart_at">Departure:</label>
+                        <label for="return_date">Return Date:</label>
+                    </ul>
+                    <ul>
+                        <input type="text" name="destination" placeholder="example: Seattle">
+                        <textarea type="text" name="description" cols="30" rows="3" placeholder="1000 Maximum Characters"></textarea>
+                        <input id="current_day" type="date" name="depart_at" placeholder="Must be past current day" min="">
+                        <input type="date" name="return_date" placeholder="Must be past Departure">
+                    </ul>
+                    <button type="submit" name="AddTravelPlan" value="AddTravelPlan">Add</button>
+                </form>
+                {% for errors in messages %}
+                    <p>{{ errors }}</p>
+                {% endfor %}
+            </fieldset>
+        </div>
+    </body>
+</html>
